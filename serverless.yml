@@ -1,0 +1,44 @@
+component: http
+name: http-nuxtjs-1g3h2LIoGx
+org: '1254348441'
+app: nuxt
+stage: dev
+inputs:
+  region: ap-guangzhou
+  src:
+    dist: ./
+    hook: npm run build
+    exclude:
+      - .env
+  faas:
+    runtime: Nodejs12.16
+    eip: true
+    timeout: 10
+    memorySize: 512
+    tags: []
+    framework: nuxtjs
+    environments:
+      - key: STATIC_URL
+        value: 'https://nuxt-dev-1254348441.cos.ap-guangzhou.myqcloud.com'
+      - key: SERVERLESS
+        value: '1'
+    layers:
+      - name: nuxt-layer
+        version: 1
+  apigw:
+    timeout: 60
+    protocols:
+      - http
+      - https
+    environment: release
+    customDomains:
+      - domain: nuxt.qietuzai.top
+        certId: 1S7Cu4U1
+        protocols:
+          - http
+          - https
+        pathMap:
+          - path: /
+            environment: release
+        customMap: true
+        isDefaultMapping: false
